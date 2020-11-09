@@ -1,7 +1,9 @@
 package com.example.Mansion.controller;
 
 
-import com.example.Mansion.entity.Post;
+import com.example.Mansion.dao.PostRequest;
+import com.example.Mansion.entity.PostEntity;
+import com.example.Mansion.entity.UserEntity;
 import com.example.Mansion.repository.PostRepository;
 import com.example.Mansion.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,11 @@ public class PostController {
     }
 
     @PostMapping
-    public Post addPost(@RequestBody Post post){
-        return postRepository.save(post);
+    public PostEntity addPost(@RequestBody PostRequest postRequest, @RequestParam String userId){
+        return postService.savePostFromUser(postRequest,userId);
     }
     @GetMapping
-    public List<Post> getPost(){
+    public List<PostEntity> getPost(){
         return postRepository.findAll();
     }
 
