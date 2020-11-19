@@ -14,5 +14,5 @@ public class CommentEntity {
     String commentUser;
     int grade;
 
-    HttpServletRequest
+
 }
