@@ -1,37 +1,58 @@
 package com.example.Mansion.controller;
 
 
+import com.example.Mansion.entity.CommentEntity;
+import com.example.Mansion.entity.PostEntity;
 import com.example.Mansion.entity.UserEntity;
+import com.example.Mansion.repository.CommentRepository;
+import com.example.Mansion.repository.PostRepository;
 import com.example.Mansion.repository.UserRepository;
+import com.example.Mansion.services.PostService;
 import com.example.Mansion.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController()
 @RequestMapping("/api/user")
 public class UserController {
     UserRepository userRepository;
     UserService userService;
+    PostRepository postRepository;
+    CommentRepository commentRepository;
+    PostService postService;
 
     @Autowired
-    public UserController(UserRepository userRepository, UserService userService) {
+    public UserController(UserRepository userRepository,
+                          UserService userService, PostRepository postRepository,
+                          CommentRepository commentRepository, PostService postService
+    ) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
+        this.postService = postService;
+    }
+
+    @GetMapping("/{userName}/post")
+    public List<PostEntity> getUserPostList(@RequestParam String userName) {
+        return postRepository.findAllByAuthor(userName).orElseThrow(NoSuchElementException::new);
+    }
+    @GetMapping("/{userName}/comment")
+    public List<CommentEntity> getUserCommentList(@RequestParam String userName) {
+        return commentRepository.findAllByCommentUser(userName).orElseThrow(NoSuchElementException::new);
     }
 
     @GetMapping
-    public List<UserEntity> getUserList(){
+    public List<UserEntity> getUserList() {
         return userRepository.findAll();
     }
 
 
     @PostMapping
-    public UserEntity addUser(UserEntity userEntity){
+    public UserEntity addUser(@RequestBody UserEntity userEntity) {
         return userRepository.save(userEntity);
     }
 
