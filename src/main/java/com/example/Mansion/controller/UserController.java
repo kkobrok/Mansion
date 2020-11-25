@@ -8,6 +8,7 @@ import com.example.Mansion.repository.CommentRepository;
 import com.example.Mansion.repository.PostRepository;
 import com.example.Mansion.repository.UserRepository;
 import com.example.Mansion.services.PostService;
+import com.example.Mansion.services.SecUserDetailsService;
 import com.example.Mansion.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,16 +25,19 @@ public class UserController {
     CommentRepository commentRepository;
     PostService postService;
 
+    SecUserDetailsService secUserDetailsService;
+
     @Autowired
     public UserController(UserRepository userRepository,
                           UserService userService, PostRepository postRepository,
-                          CommentRepository commentRepository, PostService postService
-    ) {
+                          CommentRepository commentRepository, PostService postService,
+                          SecUserDetailsService secUserDetailsService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.postService = postService;
+        this.secUserDetailsService = secUserDetailsService;
     }
 
     @GetMapping("/{userName}/post")
@@ -53,6 +57,7 @@ public class UserController {
 
     @PostMapping
     public UserEntity addUser(@RequestBody UserEntity userEntity) {
+//        secUserDetailsService.loadUserByUsername(userEntity.getLogin());
         return userRepository.save(userEntity);
     }
 

@@ -48,4 +48,6 @@ public class PostController {
                                        @RequestParam String memId) {
         return postService.addCommentToPost(comment, userId, memId);
     }
+
+
 }

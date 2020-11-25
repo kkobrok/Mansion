@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface PostRepository extends MongoRepository<PostEntity,String> {
     Optional<List<PostEntity>> findAllByAuthor(String author);
     Optional<PostEntity> findFirstById (String Id);

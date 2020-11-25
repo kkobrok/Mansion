@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+
 public interface CommentRepository extends MongoRepository<CommentEntity,String> {
     Optional<List<CommentEntity>> findAllByCommentUser(String commenterLogin);
 }
