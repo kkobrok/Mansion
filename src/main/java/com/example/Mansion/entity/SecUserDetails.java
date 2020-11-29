@@ -1,10 +1,14 @@
 package com.example.Mansion.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,27 +17,28 @@ import java.util.Collections;
 
 public class SecUserDetails implements UserDetails {
 
+
     private UserEntity userEntity;
-    private PasswordEncoder encoder;
+    PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
 
     public SecUserDetails(UserEntity userEntity) {
         this.userEntity = userEntity;
-        encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("BASE_AUTHORITY"));
+        return Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRole()));
     }
     @Override
     public String getPassword() {
-        return userEntity.password;
+        return (encoder.encode(userEntity.getPassword()));
     }
 
     @Override
     public String getUsername() {
-        return userEntity.login;
+        return userEntity.getLogin();
     }
 
     @Override
